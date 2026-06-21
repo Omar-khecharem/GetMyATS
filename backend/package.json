@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "ATS Scanner AI - Analyse de CV et matching avec offres d'emploi",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node scripts/dev.js"
