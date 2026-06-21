@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { uploadAndAnalyze, analyzeCV } from '../services/api'
-import { incrementUsage, isBlocked, getRemaining } from '../utils/usage'
+import { incrementUsage, isBlocked, getRemaining, getLimit, applyPromo, hasPromo } from '../utils/usage'
+import { validatePromo } from '../services/api'
 
 export default function Dashboard() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [fileName, setFileName] = useState('')
+  const [promoCode, setPromoCode] = useState('')
+  const [promoStatus, setPromoStatus] = useState(hasPromo() ? 'applied' : '')
+  const [promoLoading, setPromoLoading] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -35,6 +39,7 @@ export default function Dashboard() {
     try {
       const uploadRes = await uploadAndAnalyze(file)
       const cvText = uploadRes.data.extractedText
+      sessionStorage.setItem('ats_cv_text', cvText)
       incrementUsage()
       const result = await analyzeCV(cvText)
       navigate('/result', { state: result.data })
@@ -137,9 +142,50 @@ export default function Dashboard() {
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-4 text-xs text-ink-muted">
-          <span>{getRemaining()} / 3 free analyses remaining</span>
+          <span>{getRemaining()} / {getLimit()} free analyses remaining</span>
           <span className="w-1 h-1 bg-ink-muted rounded-full" />
           <span>Your data is processed securely and never stored</span>
+        </div>
+
+        <div className="mt-6 max-w-md mx-auto">
+          <div className="border-t-2 border-ink/10 pt-6">
+            {promoStatus === 'applied' ? (
+              <div className="text-center text-xs text-ink-muted">
+                Promo code applied — <span className="font-semibold text-ink">{getLimit()} analyses total</span>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  placeholder="Enter promo code"
+                  className="flex-1 border-2 border-ink px-3 py-2 text-sm text-ink bg-surface outline-none focus:bg-ink/5"
+                />
+                <button
+                  onClick={async () => {
+                    if (!promoCode.trim()) return
+                    setPromoLoading(true)
+                    setError('')
+                    try {
+                      const res = await validatePromo(promoCode.trim())
+                      applyPromo(res.bonus)
+                      setPromoStatus('applied')
+                      setPromoCode('')
+                    } catch (err) {
+                      setError(err.response?.data?.error || 'Invalid promo code')
+                    } finally {
+                      setPromoLoading(false)
+                    }
+                  }}
+                  disabled={promoLoading || !promoCode.trim()}
+                  className="btn-outline px-4 py-2 text-sm font-semibold disabled:opacity-50"
+                >
+                  {promoLoading ? '...' : 'Apply'}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

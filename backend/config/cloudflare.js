@@ -1,24 +1,19 @@
-const apiBase = (accountId) =>
-  `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run`;
+const WORKER_URL = 'https://ats-ai-worker.khcharem-omar.workers.dev'
 
 const run = async (model, input) => {
-  const response = await fetch(
-    `${apiBase(process.env.CLOUDFLARE_ACCOUNT_ID)}/${model}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(input),
-    }
-  );
+  const body = { model, input: { ...input, max_tokens: 2048 } }
+  const response = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
 
-  const data = await response.json();
+  const data = await response.json()
   if (!data.success) {
-    throw new Error(data.errors?.[0]?.message || 'Cloudflare AI request failed');
+    console.error('[CLOUDFLARE ERROR]', data.error)
+    throw new Error(data.error || 'Cloudflare AI worker request failed')
   }
-  return data.result;
-};
+  return data.result
+}
 
-module.exports = { run };
+module.exports = { run }

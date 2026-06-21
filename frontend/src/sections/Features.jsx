@@ -21,6 +21,29 @@ const features = [
     title: 'CV Optimization',
     description: 'Actionable tips to rephrase and restructure your CV for maximum ATS compatibility.',
   },
+  {
+    icon: 'enhance',
+    title: 'Bullet Enhancer',
+    description: 'Transform weak bullet points into powerful, achievement-driven statements with strong action verbs.',
+    link: '/bullet-enhancer',
+  },
+  {
+    icon: 'match',
+    title: 'Job Match',
+    description: 'Compare your CV against any job description and see exactly where you stand.',
+    link: '/job-match',
+  },
+  {
+    icon: 'interview',
+    title: 'Interview Prep',
+    description: 'Generate realistic interview questions and talking points tailored to your CV and target role.',
+    link: '/interview',
+  },
+  {
+    icon: 'tips',
+    title: 'Personalized Tips',
+    description: 'Get custom advice on action verbs, quantifiable achievements, structure, and ATS formatting.',
+  },
 ]
 
 export default function Features() {

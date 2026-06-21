@@ -22,7 +22,11 @@ const plans = [
   },
 ]
 
+import { useNavigate } from 'react-router-dom'
+
 export default function PricingCard({ name, price, desc, features, popular }) {
+  const navigate = useNavigate()
+
   return (
     <div
       className={`relative border-2 transition-all duration-300 ${
@@ -52,6 +56,7 @@ export default function PricingCard({ name, price, desc, features, popular }) {
           ))}
         </ul>
         <button
+          onClick={() => navigate('/payment', { state: { plan: name, price } })}
           className={`w-full py-3 border-2 text-sm font-medium transition-all duration-300 ${
             popular
               ? 'border-white text-white hover:bg-white hover:text-ink'

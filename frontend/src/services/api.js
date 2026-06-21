@@ -7,7 +7,7 @@ const api = axios.create({
 })
 
 export const analyzeCV = async (cvText) => {
-  const { data } = await api.post('/analyze', { cvText })
+  const { data } = await api.post('/analyze-ai', { cvText })
   return data
 }
 
@@ -18,6 +18,31 @@ export const uploadAndAnalyze = async (file) => {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000,
   })
+  return data
+}
+
+export const matchCVWithJob = async (cvText, jobDescription) => {
+  const { data } = await api.post('/match-job', { cvText, jobDescription })
+  return data
+}
+
+export const enhanceBulletPoint = async (bulletText, context) => {
+  const { data } = await api.post('/enhance-bullet', { bulletText, context })
+  return data
+}
+
+export const generateInterviewPrep = async (cvText, jobDescription) => {
+  const { data } = await api.post('/interview-questions', { cvText, jobDescription })
+  return data
+}
+
+export const interviewChatMessage = async (cvText, jobDescription, history, latestAnswer) => {
+  const { data } = await api.post('/interview-chat', { cvText, jobDescription, history, latestAnswer })
+  return data
+}
+
+export const validatePromo = async (code) => {
+  const { data } = await api.post('/validate-promo', { code })
   return data
 }
 

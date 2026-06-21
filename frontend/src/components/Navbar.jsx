@@ -40,12 +40,10 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <Link
-            to="/dashboard"
-            className="btn-solid px-5 py-2 rounded-none text-sm font-medium"
-          >
-            Analyze my CV
-          </Link>
+          <Link to="/bullet-enhancer" className="text-sm text-ink-secondary hover:text-ink transition-colors">Enhance</Link>
+          <Link to="/job-match" className="text-sm text-ink-secondary hover:text-ink transition-colors">Job Match</Link>
+          <Link to="/interview" className="text-sm text-ink-secondary hover:text-ink transition-colors">Interview</Link>
+          <Link to="/dashboard" className="btn-solid px-5 py-2 rounded-none text-sm font-medium">Analyze my CV</Link>
         </div>
 
         <button
@@ -53,9 +51,9 @@ export default function Navbar() {
           className="md:hidden flex flex-col gap-1.5 p-2"
           aria-label="Menu"
         >
-          <span className={`block w-5 h-[2px] bg-ink transition-all ${mobileOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
+          <span className={`block w-5 h-[2px] bg-ink transition-all ${mobileOpen ? 'rotate-45 translate-y-[8px]' : ''}`} />
           <span className={`block w-5 h-[2px] bg-ink transition-all ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-5 h-[2px] bg-ink transition-all ${mobileOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
+          <span className={`block w-5 h-[2px] bg-ink transition-all ${mobileOpen ? '-rotate-45 -translate-y-[8px]' : ''}`} />
         </button>
       </div>
 
@@ -66,9 +64,10 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <Link to="/dashboard" className="btn-solid text-center px-5 py-2 rounded-none text-sm font-medium" onClick={() => setMobileOpen(false)}>
-            Analyze my CV
-          </Link>
+          <Link to="/bullet-enhancer" className="text-sm text-ink-secondary" onClick={() => setMobileOpen(false)}>Enhance</Link>
+          <Link to="/job-match" className="text-sm text-ink-secondary" onClick={() => setMobileOpen(false)}>Job Match</Link>
+          <Link to="/interview" className="text-sm text-ink-secondary" onClick={() => setMobileOpen(false)}>Interview</Link>
+          <Link to="/dashboard" className="btn-solid text-center px-5 py-2 rounded-none text-sm font-medium" onClick={() => setMobileOpen(false)}>Analyze my CV</Link>
         </div>
       )}
     </nav>

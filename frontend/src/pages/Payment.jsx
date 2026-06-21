@@ -1,10 +1,15 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { resetUsage } from '../utils/usage'
 
 export default function Payment() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const plan = location.state?.plan || 'Pro'
+  const planPrice = location.state?.price || '9'
   const [cardNumber, setCardNumber] = useState('')
+
+  useEffect(() => { window.scrollTo(0, 0) }, [])
   const [expiry, setExpiry] = useState('')
   const [cvv, setCvv] = useState('')
   const [name, setName] = useState('')
@@ -64,22 +69,22 @@ export default function Payment() {
               Upgrade your <span className="border-b-2 border-ink">plan</span>
             </h1>
             <p className="text-sm text-ink-secondary">
-              You've used all 3 free analyses. Unlock unlimited access for just $9/month.
+              {plan === 'Free' ? 'Upgrade to unlock unlimited analyses and AI-powered features.' : `You've used all 3 free analyses. Unlock unlimited access with the ${plan} plan for just $${planPrice}/month.`}
             </p>
           </div>
 
           <div className="frame p-6 md:p-8">
             <div className="geo-dot" style={{ width: 6, height: 6, top: -3, right: 20 }} />
 
-            <div className="flex items-center gap-3 mb-6 pb-6 border-b-2 border-ink">
-              <div className="w-10 h-10 border-2 border-ink flex items-center justify-center">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+              <div className="flex items-center gap-3 mb-6 pb-6 border-b-2 border-ink">
+                <div className="w-10 h-10 border-2 border-ink flex items-center justify-center">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-ink">{plan} Plan</p>
+                  <p className="text-xs text-ink-muted">${planPrice}/month — Unlimited analyses</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-ink">Pro Plan</p>
-                <p className="text-xs text-ink-muted">$9/month — Unlimited analyses</p>
-              </div>
-            </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -127,7 +132,7 @@ export default function Payment() {
               )}
 
               <button type="submit" className="btn-solid w-full py-3.5 text-sm font-semibold">
-                Pay $9 — Upgrade now
+                Pay ${planPrice} — Upgrade to {plan}
               </button>
             </form>
 

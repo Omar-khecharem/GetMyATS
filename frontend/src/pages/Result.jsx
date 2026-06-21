@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import AtsScoreCircle from '../components/AtsScoreCircle'
 
 export default function Result() {
@@ -7,6 +7,7 @@ export default function Result() {
   const navigate = useNavigate()
   const data = location.state
   const panelRef = useRef(null)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (!data) {
@@ -15,6 +16,43 @@ export default function Result() {
     }
     window.scrollTo(0, 0)
   }, [data, navigate])
+
+  const saveAsPdf = async () => {
+    if (!panelRef.current) return
+    setSaving(true)
+    const { default: html2canvas } = await import('html2canvas')
+    const { default: jsPDF } = await import('jspdf')
+
+    try {
+      const canvas = await html2canvas(panelRef.current, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+      })
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const imgWidth = pageWidth - 20
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 10
+
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+      heightLeft -= pdf.internal.pageSize.getHeight() - 20
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight + 10
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+        heightLeft -= pdf.internal.pageSize.getHeight() - 20
+      }
+
+      pdf.save(`ats-report-${Date.now()}.pdf`)
+    } catch (err) {
+      console.error('PDF generation failed:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
 
   if (!data) return null
 
@@ -131,17 +169,20 @@ export default function Result() {
             <div className="border-2 border-ink p-6 mb-10">
               <div className="flex items-center gap-2 mb-5">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
-                <h3 className="text-sm font-bold text-ink uppercase tracking-[0.1em]">Improvement Tips</h3>
+                <h3 className="text-sm font-bold text-ink uppercase tracking-[0.1em]">Personalized Improvement Tips</h3>
               </div>
-              <ul className="space-y-3">
-                {improvementTips.map((tip, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-ink-secondary">
-                    <span className="w-6 h-6 border-2 border-ink flex items-center justify-center text-[10px] font-bold text-ink shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    {tip}
-                  </li>
-                ))}
+              <ul className="space-y-4">
+                {improvementTips.map((tip, i) => {
+                  const isActionTip = /verb|action|strong|use |replace|avoid|add |include|quantif|measur|number|percent/i.test(tip)
+                  return (
+                    <li key={i} className="flex items-start gap-3 text-sm text-ink-secondary animate-slide-up" style={{ animationDelay: `${i * 0.08}s` }}>
+                      <span className={`w-7 h-7 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5 ${isActionTip ? 'bg-ink text-white border-2 border-ink' : 'border-2 border-ink text-ink'}`}>
+                        {i + 1}
+                      </span>
+                      <span className="pt-1">{tip}</span>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           )}
@@ -154,43 +195,33 @@ export default function Result() {
               Analyze another CV
             </button>
             <button
-              onClick={() => {
-                const lines = [
-                  '========================================',
-                  '  ATS SCANNER — ANALYSIS REPORT',
-                  '========================================',
-                  '',
-                  `Score: ${score} / 100`,
-                  `Status: ${score >= 80 ? 'Excellent Match' : score >= 50 ? 'Room for Improvement' : 'Needs Work'}`,
-                  `Keywords Found: ${foundKeywords?.length || 0}`,
-                  `Keywords Missing: ${missingKeywords?.length || 0}`,
-                  '',
-                  '--- FOUND KEYWORDS ---',
-                  ...(showFound.length ? showFound : ['(none)']),
-                  '',
-                  '--- MISSING KEYWORDS ---',
-                  ...(showMissing.length ? showMissing : ['(none)']),
-                  '',
-                  '--- IMPROVEMENT TIPS ---',
-                  ...(improvementTips?.length
-                    ? improvementTips.map((t, i) => `${i + 1}. ${t}`)
-                    : ['(none)']),
-                  '',
-                  `Generated: ${new Date().toLocaleString()}`,
-                  '========================================',
-                ].join('\n')
-                const blob = new Blob([lines], { type: 'text/plain' })
-                const url = URL.createObjectURL(blob)
-                const a = document.createElement('a')
-                a.href = url
-                a.download = `ats-report-${Date.now()}.txt`
-                a.click()
-                URL.revokeObjectURL(url)
-              }}
-              className="btn-outline px-6 py-3.5 text-sm font-semibold"
+              onClick={saveAsPdf}
+              disabled={saving}
+              className="btn-outline px-6 py-3.5 text-sm font-semibold disabled:opacity-50"
             >
-              Save report
+              {saving ? 'Generating PDF...' : 'Save report as PDF'}
             </button>
+          </div>
+
+          <div className="mt-10 border-t-2 border-ink pt-8">
+            <p className="text-xs text-ink-muted uppercase tracking-[0.1em] mb-4 text-center">Power up your job search</p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              <Link to="/bullet-enhancer" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Bullet Enhancer</div>
+                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Supercharge your bullet points</div>
+              </Link>
+              <Link to="/job-match" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Job Match</div>
+                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Match CV with any job</div>
+              </Link>
+              <Link to="/interview" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Interview Prep</div>
+                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Practice with AI questions</div>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

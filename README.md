@@ -1,118 +1,158 @@
 # GetMyATS
 
-**AI-Powered ATS CV Analysis Dashboard** — Upload your CV (PDF), get an instant ATS compatibility score, keyword analysis, and actionable improvement tips.
+ATS CV Analysis Platform — analysez, optimisez et préparez vos candidatures avec l'aide de l'IA.
 
 ## Features
 
-- **PDF Upload** — Drag & drop or click to upload your CV
-- **ATS Score** — Instant compatibility score from 0 to 100
-- **Keyword Detection** — See which common ATS keywords your CV matches and which are missing
-- **Improvement Tips** — Actionable suggestions to optimize your CV
-- **Dashboard Report** — Clean, structured analysis results with match rate visualization
-- **Free Tier** — 3 free analyses, then a static payment demo page
+- **ATS Score Analysis** — Analyse votre CV et calcule un score de compatibilité ATS avec des mots-clés trouvés/manquants et des conseils personnalisés.
+- **AI-Powered Analysis** — Analyse boostée par Cloudflare Workers AI (Llama 3.1) pour des recommandations plus pertinentes.
+- **Job Match** — Comparez votre CV à une description de poste et obtenez un score de matching, les compétences matching/missing, et des recommandations.
+- **Bullet Enhancer** — Transformez des points faibles en accomplishments percutants avec l'IA.
+- **Interview Chatbot** — Entraînez-vous avec un interviewer IA qui pose des questions basées sur votre CV et le poste visé. Support vocal (Speech-to-Text + Text-to-Speech).
+- **Save Report as PDF** — Exportez votre rapport d'analyse au format PDF.
+- **Cookie Consent** — Bannière de consentement GDPR.
+- **Pricing & Payment** — Pages de tarifs avec plans (Free / Pro / Enterprise) et page de paiement simulée.
 
-## Tech Stack
+## Stack
 
-| Layer    | Technology                                 |
-| -------- | ------------------------------------------ |
-| Frontend | React 19, React Router 7, Tailwind CSS v4  |
-| Backend  | Node.js, Express                           |
-| PDF      | pdf-parse                                  |
-| 3D       | Three.js (decorative scene)                |
-| AI       | Cloudflare Workers AI (LLaMA 3)            |
+| Layer | Technologie |
+|---|---|
+| Frontend | React 19, React Router 7, Tailwind CSS v4, Vite |
+| Backend | Node.js, Express |
+| AI | Cloudflare Workers AI (Llama 3.1 8B Fast) via Worker dédié |
+| PDF | html2canvas + jsPDF |
+| 3D | Three.js (page d'accueil) |
+| Animations | GSAP, CSS animations |
+
+## Getting Started
+
+### Prérequis
+
+- Node.js >= 18
+- Compte Cloudflare avec Workers AI activé
+- Wrangler CLI (pour déployer le worker AI)
+
+### 1. Cloner et installer
+
+```bash
+git clone https://github.com/Omar-khecharem/GetMyATS.git
+cd GetMyATS
+
+# Backend
+cd backend
+cp .env.example .env
+npm install
+
+# Frontend
+cd ../frontend
+npm install
+```
+
+### 2. Configurer Cloudflare
+
+1. Créez un compte sur [Cloudflare](https://dash.cloudflare.com/)
+2. Activez Workers AI
+3. Créez un token API avec les permissions `workers_scripts:write` et `ai:write`
+4. Remplissez les variables dans `backend/.env` :
+
+```env
+CLOUDFLARE_ACCOUNT_ID=votre_account_id
+CLOUDFLARE_API_TOKEN=votre_api_token
+```
+
+### 3. Déployer le Worker AI
+
+```bash
+cd workers/ai-worker
+npx wrangler deploy
+```
+
+Mettez à jour l'URL du worker dans `backend/config/cloudflare.js` si nécessaire.
+
+### 4. Lancer l'application
+
+```bash
+# Terminal 1 : Backend
+cd backend
+npm run dev
+
+# Terminal 2 : Frontend
+cd frontend
+npm run dev
+```
+
+Accédez à [http://localhost:5173](http://localhost:5173)
+
+### Promo Code
+
+Le code promo `isimgien` (configurable dans `.env`) augmente la limite d'analyses gratuites à 10.
+
+| Variable | Default | Description |
+|---|---|---|
+| `PROMO_CODE` | `isimgien` | Code promo valide |
+| `PROMO_BONUS` | `10` | Nombre d'analyses supplémentaires |
 
 ## Project Structure
 
 ```
-getmyats/
+GetMyATS/
 ├── backend/
-│   ├── controllers/       # Route handlers
-│   ├── middleware/         # Error handler, Multer upload
-│   ├── routes/            # Express routes
-│   ├── services/          # ATS analysis & PDF parsing
-│   ├── utils/prompts/     # AI prompt builder
-│   ├── config/            # Cloudflare AI client
-│   ├── app.js             # Express app setup
-│   └── server.js          # Entry point
+│   ├── config/              # Cloudflare worker config
+│   ├── controllers/         # Route handlers
+│   ├── middleware/          # Multer upload config
+│   ├── routes/              # Express routes
+│   ├── scripts/             # Dev script (auto-kill port)
+│   ├── services/            # Business logic (AI + fallback)
+│   ├── utils/prompts/       # AI prompt builders
+│   ├── uploads/             # Temporary PDF uploads (gitignored)
+│   ├── .env                 # Local env (gitignored)
+│   └── server.js            # Entry point
 ├── frontend/
 │   ├── src/
-│   │   ├── components/    # Navbar, Footer, ScoreCircle, etc.
-│   │   ├── pages/         # Landing, Dashboard, Result, Payment
-│   │   ├── sections/      # Hero, Features, Pricing, etc.
-│   │   ├── services/      # Axios API client
-│   │   ├── utils/         # Usage tracker (localStorage)
-│   │   ├── App.jsx        # Router setup
-│   │   └── index.css      # Tailwind theme + geometric styles
-│   ├── public/            # Static assets
-│   └── index.html
+│   │   ├── components/      # Reusable components
+│   │   ├── pages/           # Route pages
+│   │   ├── sections/        # Landing page sections
+│   │   ├── services/        # API client (Axios)
+│   │   └── utils/           # Usage tracking, helpers
+│   └── vite.config.js       # Vite config with proxy
+├── workers/
+│   └── ai-worker/           # Cloudflare Workers AI
+│       ├── src/index.js     # Worker code
+│       └── wrangler.toml    # Wrangler config
 └── README.md
 ```
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js >= 18
-- npm
-
-### Backend Setup
-
-```bash
-cd backend
-npm install
-
-# Create .env file with your Cloudflare AI credentials:
-#   ACCOUNT_ID=your_account_id
-#   API_TOKEN=your_api_token
-#   PORT=3000
-
-npm start
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The frontend dev server proxies `/api` requests to `localhost:3000`.
-
-### Build for Production
-
-```bash
-cd frontend
-npm run build
-```
-
-Output is written to `frontend/dist/`.
-
-## Branches
-
-- `main` — Stable production-ready code
-- `develop` — Active development
-- `feature/ai-analysis` — AI-powered analysis integration
-- `feature/payment` — Payment & usage limiting
-- `feature/design-v2` — Black & white geometric redesign
-
-## Usage
-
-1. Navigate to `/dashboard`
-2. Upload your CV as a PDF file
-3. Wait for the analysis (PDF extraction + keyword matching)
-4. View your ATS Score, found/missing keywords, and improvement tips
-5. Click **Save report** to download a `.txt` summary
-
-After 3 free analyses, you'll be prompted to the payment page (static demo — no real charge).
-
 ## API Endpoints
 
-| Method | Path              | Description                          |
-| ------ | ----------------- | ------------------------------------ |
-| POST   | `/api/ats/analyze`      | Analyze CV text against common ATS keywords |
-| POST   | `/api/ats/analyze-ai`   | AI-powered analysis via Cloudflare    |
-| POST   | `/api/ats/upload-cv`    | Upload PDF and extract text           |
+| Method | Route | Description |
+|---|---|---|
+| POST | `/api/ats/analyze` | Analyse sans IA (fallback keywords) |
+| POST | `/api/ats/analyze-ai` | Analyse avec Cloudflare AI |
+| POST | `/api/ats/upload-cv` | Upload PDF + extraction texte |
+| POST | `/api/ats/match-job` | Match CV vs job description |
+| POST | `/api/ats/enhance-bullet` | Amélioration de bullet points |
+| POST | `/api/ats/interview-questions` | Génération de questions d'entretien |
+| POST | `/api/ats/interview-chat` | Chatbot entretien (avec historique) |
+| POST | `/api/ats/validate-promo` | Validation d'un code promo |
+
+## Frontend Routes
+
+| Route | Page |
+|---|---|
+| `/` | Landing page |
+| `/dashboard` | Upload CV + analyse |
+| `/result` | Rapport d'analyse |
+| `/job-match` | Comparaison CV / offre |
+| `/job-match-result` | Résultat du matching |
+| `/bullet-enhancer` | Amélioration de bullet points |
+| `/interview` | Chatbot entretien |
+| `/payment` | Page de paiement simulée |
+| `/cookies` | Politique des cookies |
+| `/privacy` | Politique de confidentialité |
+
+## AI Fallback
+
+Chaque fonctionnalité AI dispose d'un fallback déterministe (mots-clés, patterns regex, templates). Si Cloudflare Workers AI échoue, le service retourne automatiquement une analyse basée sur des règles sans planter.
 
 ## License
 
