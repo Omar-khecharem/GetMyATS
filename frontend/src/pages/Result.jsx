@@ -67,14 +67,15 @@ export default function Result() {
 
       <div className="max-w-5xl mx-auto px-6">
         <div ref={panelRef} className="mb-10">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 border-2 border-ink text-xs font-medium text-ink mb-4">
-            <span className="w-1.5 h-1.5 bg-ink" />
-            ATS DASHBOARD
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 border-2 border-ink text-xs font-medium text-ink mb-4">
+              <span className="w-1.5 h-1.5 bg-ink" />
+              ATS DASHBOARD
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-ink mb-3">
+              Analysis <span className="border-b-2 border-ink">Report</span>
+            </h1>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mb-3">
-            Analysis <span className="border-b-2 border-ink">Report</span>
-          </h1>
-        </div>
 
         <div className="frame p-8 md:p-10">
           <div className="geo-dot" style={{ width: 8, height: 8, top: -4, right: 60 }} />
@@ -187,42 +188,44 @@ export default function Result() {
             </div>
           )}
 
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="btn-solid flex-1 py-3.5 text-sm font-semibold"
-            >
-              Analyze another CV
-            </button>
-            <button
-              onClick={saveAsPdf}
-              disabled={saving}
-              className="btn-outline px-6 py-3.5 text-sm font-semibold disabled:opacity-50"
-            >
-              {saving ? 'Generating PDF...' : 'Save report as PDF'}
-            </button>
-          </div>
+        </div>
+      </div>
+      </div>
 
-          <div className="mt-10 border-t-2 border-ink pt-8">
-            <p className="text-xs text-ink-muted uppercase tracking-[0.1em] mb-4 text-center">Power up your job search</p>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <Link to="/bullet-enhancer" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
-                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
-                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Bullet Enhancer</div>
-                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Supercharge your bullet points</div>
-              </Link>
-              <Link to="/job-match" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
-                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Job Match</div>
-                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Match CV with any job</div>
-              </Link>
-              <Link to="/interview" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
-                <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
-                <div className="text-xs font-semibold uppercase tracking-[0.05em]">Interview Prep</div>
-                <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Practice with AI questions</div>
-              </Link>
-            </div>
-          </div>
+      <div className="flex gap-4 max-w-5xl mx-auto px-6 mt-6">
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="btn-solid flex-1 py-3.5 text-sm font-semibold"
+        >
+          Analyze another CV
+        </button>
+        <button
+          onClick={saveAsPdf}
+          disabled={saving}
+          className="btn-outline px-6 py-3.5 text-sm font-semibold disabled:opacity-50"
+        >
+          {saving ? 'Generating PDF...' : 'Save report as PDF'}
+        </button>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6 mt-10 border-t-2 border-ink pt-8">
+        <p className="text-xs text-ink-muted uppercase tracking-[0.1em] mb-4 text-center">Power up your job search</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Link to="/bullet-enhancer" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+            <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+            <div className="text-xs font-semibold uppercase tracking-[0.05em]">Bullet Enhancer</div>
+            <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Supercharge your bullet points</div>
+          </Link>
+          <Link to="/job-match" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+            <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            <div className="text-xs font-semibold uppercase tracking-[0.05em]">Job Match</div>
+            <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Match CV with any job</div>
+          </Link>
+          <Link to="/interview" className="border-2 border-ink p-4 text-center hover:bg-ink hover:text-white transition-all duration-200 group">
+            <svg className="w-5 h-5 mx-auto mb-2 text-ink group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+            <div className="text-xs font-semibold uppercase tracking-[0.05em]">Interview Prep</div>
+            <div className="text-[10px] text-ink-muted group-hover:text-white/60 mt-1">Practice with AI questions</div>
+          </Link>
         </div>
       </div>
     </div>
