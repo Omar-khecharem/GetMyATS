@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { uploadAndAnalyze, analyzeCV } from '../services/api'
 import { incrementUsage, isBlocked, getRemaining, getLimit, applyPromo, hasPromo } from '../utils/usage'
 import { validatePromo } from '../services/api'
@@ -53,6 +54,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-16 flex items-center justify-center">
+        <Seo title="Analyzing Your CV..." canonicalUrl="https://get-my-ats.vercel.app/dashboard" />
         <div className="fixed inset-0 geo-grid pointer-events-none" />
         <div className="text-center">
           <div className="frame p-12 md:p-16 inline-flex flex-col items-center gap-6">
@@ -82,6 +84,12 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="CV Analyzer Dashboard"
+        description="Upload your CV or resume and get an instant ATS compatibility score. AI-powered keyword analysis, section detection, and optimization suggestions by GetMyATS."
+        keywords="CV upload, ATS analysis, resume scanner, CV dashboard, keyword extraction"
+        canonicalUrl="https://get-my-ats.vercel.app/dashboard"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
       <div className="geo-circle" style={{ width: 300, height: 300, top: '10%', right: '-5%', opacity: 0.08 }} />
       <div className="geo-square" style={{ width: 150, height: 150, bottom: '15%', left: '-3%', opacity: 0.06, transform: 'rotate(45deg)' }} />

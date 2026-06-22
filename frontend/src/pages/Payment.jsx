@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { resetUsage } from '../utils/usage'
 
 export default function Payment() {
@@ -41,6 +42,12 @@ export default function Payment() {
 
   return (
     <div className="min-h-screen pt-28 pb-16 flex items-center justify-center">
+      <Seo
+        title="Unlock Unlimited CV Analyses"
+        description="Upgrade your GetMyATS plan for unlimited CV analyses, advanced job matching, bullet enhancement, and AI interview practice. Created by Omar Khecharem."
+        keywords="ATS scanner pricing, CV analysis upgrade, unlimited scans, GetMyATS pro"
+        canonicalUrl="https://get-my-ats.vercel.app/payment"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
       <div className="geo-circle absolute" style={{ width: 400, height: 400, top: '-15%', right: '-10%', opacity: 0.03 }} />
       <div className="geo-square absolute" style={{ width: 200, height: 200, bottom: '10%', left: '-5%', opacity: 0.03, transform: 'rotate(45deg)' }} />

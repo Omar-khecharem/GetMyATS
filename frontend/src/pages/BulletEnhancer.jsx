@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { enhanceBulletPoint } from '../services/api'
 
 export default function BulletEnhancer() {
@@ -40,6 +41,12 @@ export default function BulletEnhancer() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="AI Resume Bullet Point Enhancer"
+        description="Transform weak resume bullet points into powerful, achievement-driven statements with AI. Improve your CV's impact and pass ATS filters with GetMyATS."
+        keywords="resume bullet enhancer, CV bullet points, AI resume writing, achievement statements, CV improvement"
+        canonicalUrl="https://get-my-ats.vercel.app/bullet-enhancer"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
       <div className="geo-square" style={{ width: 180, height: 180, top: '8%', right: '-5%', opacity: 0.05, transform: 'rotate(45deg)' }} />
 

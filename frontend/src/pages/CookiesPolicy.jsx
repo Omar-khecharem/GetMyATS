@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 
 export default function CookiesPolicy() {
   useEffect(() => {
@@ -8,6 +9,12 @@ export default function CookiesPolicy() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="Cookies Policy"
+        description="Learn how GetMyATS uses cookies and similar technologies. Understand your choices for managing cookie preferences on our AI-powered CV analysis platform."
+        keywords="cookies policy, cookie consent, GDPR, data tracking, GetMyATS"
+        canonicalUrl="https://get-my-ats.vercel.app/cookies"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
 
       <div className="max-w-3xl mx-auto px-6">

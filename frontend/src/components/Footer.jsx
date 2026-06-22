@@ -24,7 +24,7 @@ export default function Footer() {
           <Link to="/privacy" className="hover:text-ink transition-colors">Privacy</Link>
         </div>
         <p className="text-xs text-ink-muted">
-          &copy; {new Date().getFullYear()} ATS Scanner. All rights reserved.
+          &copy; {new Date().getFullYear()} GetMyATS by <a href="https://github.com/Omar-khecharem" target="_blank" rel="noopener noreferrer" className="underline hover:text-ink transition-colors">Omar Khecharem</a>. All rights reserved.
         </p>
       </div>
     </footer>

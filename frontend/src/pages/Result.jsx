@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import AtsScoreCircle from '../components/AtsScoreCircle'
 
 export default function Result() {
@@ -63,6 +64,12 @@ export default function Result() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="ATS Analysis Results & CV Score"
+        description="View your detailed ATS compatibility score, found and missing keywords, strengths, weaknesses, and actionable improvement tips. Optimize your CV with GetMyATS."
+        keywords="ATS score, CV analysis results, resume rating, keyword match, CV optimization"
+        canonicalUrl="https://get-my-ats.vercel.app/result"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-6">

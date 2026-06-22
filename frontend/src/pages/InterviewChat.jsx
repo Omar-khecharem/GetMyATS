@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { interviewChatMessage, uploadAndAnalyze } from '../services/api'
 
 export default function InterviewChat() {
@@ -325,6 +326,12 @@ export default function InterviewChat() {
 
   return (
     <div className="h-screen bg-canvas overflow-hidden flex flex-col">
+      <Seo
+        title="AI Interview Practice Chat"
+        description="Practice job interviews with GetMyATS AI chatbot. Upload your CV and get tailored interview questions with real-time speech recognition and text-to-speech."
+        keywords="AI interview practice, mock interview chatbot, speech recognition interview, CV-based interview questions, job interview preparation"
+        canonicalUrl="https://get-my-ats.vercel.app/interview"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
 
       <div className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 flex flex-col min-h-0">

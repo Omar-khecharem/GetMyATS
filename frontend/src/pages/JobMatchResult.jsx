@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 
 export default function JobMatchResult() {
   const location = useLocation()
@@ -24,6 +25,12 @@ export default function JobMatchResult() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="CV & Job Match Results"
+        description="View your detailed CV-to-job description match score, keyword alignment, and tailored suggestions to improve your application. Powered by GetMyATS."
+        keywords="job match score, CV compatibility, resume job fit, keyword match results"
+        canonicalUrl="https://get-my-ats.vercel.app/job-match-result"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-6">

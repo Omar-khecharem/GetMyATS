@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 
 export default function PrivacyPolicy() {
   useEffect(() => {
@@ -8,6 +9,12 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen pt-28 pb-16">
+      <Seo
+        title="Privacy Policy"
+        description="Read the GetMyATS privacy policy. Learn how we collect, use, and protect your personal data when you use our AI-powered CV analysis platform by Omar Khecharem."
+        keywords="privacy policy, data protection, CV privacy, GetMyATS privacy"
+        canonicalUrl="https://get-my-ats.vercel.app/privacy"
+      />
       <div className="fixed inset-0 geo-grid pointer-events-none" />
 
       <div className="max-w-3xl mx-auto px-6">
